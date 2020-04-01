@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" id="file">
+    <script>
+        // 前端操作二进制
+        // 上传文件 后端返回的是buffer 操作excel
+        // 前端最常用的Blob对象，binary large object（是不可变的），代表的是文件类型
+        // File是基于Blob
+
+        // 1.实现前端下载 html的功能
+        // let str = `<h1>hello world</h1>`
+        // const blob = new Blob([str, str], {
+        //     type: 'text/html'
+        // })
+        // // 前端下载都用a标签
+        // let a = document.createElement('a')
+        // // 下载需要download属性
+        // a.setAttribute('download', 'a.html')
+        // a.innerHTML = '下载'
+        // // 通过blob产生一个临时访问的链接
+        // a.href = URL.createObjectURL(blob)
+        // document.body.appendChild(a)
+
+        let arrayBuffer = new ArrayBuffer(10)
+        console.log(arrayBuffer)
+        let blob = new Blob([arrayBuffer])
+        console.log(blob)
+        // blob 表示传输的整体的文件
+
+        // FileReader 文件读取器
+        let fileReader = new FileReader()
+        fileReader.onload = function () {
+            console.log(fileReader.result)
+        }
+        // 尽量使用URL.createObjectURL(blob)产生url
+        fileReader.readAsDataURL(blob)
+        // 这样转换成base64的，内存占用会大一些
+
+        // 预览功能
+        file.addEventListener('change', (e) => {
+            // let file = e.target.files[0]
+            // console.log(file)
+
+            // 一般用第二种
+            // let fileReader = new FileReader()
+            // fileReader.onload = function () {
+            //     let img = document.createElement('img')
+            //     img.src = fileReader.result
+            //     document.body.appendChild(img)
+            //     console.log(fileReader.result)
+            // }
+            // fileReader.readAsDataURL(file)
+
+            // 生成url以供预览
+            // let r = URL.createObjectURL(file)
+            // let img = document.createElement('img')
+            // img.src = r
+            // document.body.appendChild(img)
+            // URL.revokeObjectURL(r) // 释放url
+        })
+    </script>
+</body>
+</html>
