@@ -44,8 +44,8 @@
 
         // 预览功能
         file.addEventListener('change', (e) => {
-            // let file = e.target.files[0]
-            // console.log(file)
+            let file = e.target.files[0]
+            console.log(file)
 
             // 一般用第二种
             // let fileReader = new FileReader()
@@ -58,12 +58,75 @@
             // fileReader.readAsDataURL(file)
 
             // 生成url以供预览
-            // let r = URL.createObjectURL(file)
-            // let img = document.createElement('img')
-            // img.src = r
-            // document.body.appendChild(img)
+            let r = URL.createObjectURL(file)
+            let img = document.createElement('img')
+            img.src = r
+            document.body.appendChild(img)
             // URL.revokeObjectURL(r) // 释放url
         })
+
+        // arraybuffer 浏览器中的二进制
+        let buffer = new ArrayBuffer(4) // 创造4个字节
+        // TypeArray 描述底层的二进制数据，有init8Array unit8Array 等等
+        
+        let x1 = new Uint8Array(buffer)
+        // 4个字节是32位，00000000 00000000 00000000 00000000
+        x1[0] = 1
+        // 二进制是右边低位，所以x1[0] = 1修改的是最右边的
+        // 00000000 00000000 00000000 00000001
+        x1[1] = 255
+        // 00000000 00000000 11111111 00000001
+        // 二进制是这样表示，但是数组是[1, 255, 0, 0]
+        console.log(x1)
+
+        let x2 = new Uint16Array(buffer)
+        // 0000000000000000 1111111100000001
+        // [65281, 0]
+
+        // 例子：如何将字符串转换成
+        // arrayBuffer == buffer， 两者差不多，前端的buffer和后端的buffer
+        function stringToArrayBuffer(str) {
+            // js是utf16，一个中文是2个字节
+            let buffer = new ArrayBuffer(str.length * 2)
+            let view = new Uint16Array(buffer)
+            console.log(view)
+            for (let i =0; i < str.length; i++) {
+                console.log(str.charCodeAt(i))
+                // 获取每个字符的utf16编码
+                view[i] = str.charCodeAt(i)
+            }
+            return buffer
+        }
+        console.log(stringToArrayBuffer('你好'))
+
+        function arrayBufferToString(buf) {
+            return String.fromCharCode(...new Uint16Array(buf))
+        }
+        console.log(arrayBufferToString(stringToArrayBuffer('你好')))
+
+        // 发个请求 服务端返回给我一个文件，实现下载即可
+        function request(url, method = "get") {
+            return new Promise((resolve, reject) => {
+                let xhr = new XMLHttpRequest
+                xhr.open(method, url, true)
+                xhr.responseType = 'arraybuffer'
+                xhr.onload = function () {
+                    resolve(xhr.result)
+                }
+                xhr.send()
+            })
+        }
+        // request('/download').then(arraybuffer => {
+        //     let blob = new Blob([arraybuffer])
+        //     let blobUrl = URL.revokeObjectURL(blob)
+        //     let a = document.createElement('a')
+        //     a.href = blobUrl
+        //     a.download = 'a.pdf'
+        //     document.body.appendChild(a)
+        //     a.click()
+        //     a.remove()
+        //     URL.revokeObjectURL(blobUrl)
+        // })
     </script>
 </body>
 </html>
