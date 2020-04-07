@@ -16,10 +16,11 @@ const fs = require('fs')
 // 读取文件全部采用绝对路径，因为不同环境可能不一样
 const path = require('path')
 
-// let r = path.join('a', 'b', 'c', '/') // 拼接
-// let r1 = path.resolve('a', 'b', 'c') // 可以解析绝对路径，但是以根目录
-// let r2 = path.resolve(__dirname, 'a', 'b', 'c', '/') // 解析完整目录
-// console.log(r, r2)
+let r = path.join('a', 'b', 'c', '/') // 拼接
+let r1 = path.resolve('a', 'b', 'c') // 可以解析绝对路径，但是以根目录
+let r2 = path.resolve(__dirname, 'a', 'b', 'c', '/') // 解析完整目录
+let r3 = path.resolve(__dirname, 'a', 'b', 'c') // 解析完整目录
+console.log(r, r1, r2, r3)
 // 似乎join添加一个__dirname也是同样的效果，区别在哪呢？
 // join可以拼接/，resolve不行，会回到根目录下
 // 所以，上面的例子可以改个写法

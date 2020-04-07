@@ -21,13 +21,13 @@ let girl = new Girl()
 
 girl.on('女生失恋', (data) => {
   console.log('哭' + data)
+  console.log('谁让女生失恋' + data)
 })
 girl.on('女生失恋', (data) => {
   console.log('吃' + data)
+  console.log('谁让女生失恋' + data)
 })
-girl.once('女生失恋', (data) => {
-    
-})
+girl.once('女生失恋', (data) => {})
 girl.emit('女生失恋', '我')
 // girl.off('女生失恋')
 
